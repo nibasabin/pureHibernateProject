@@ -5,10 +5,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.dao.entity.InventoryType;
 @Service
+@Scope("prototype")
 public class SessionFactoryInstance {
 	
 	public SessionFactory createSession (){

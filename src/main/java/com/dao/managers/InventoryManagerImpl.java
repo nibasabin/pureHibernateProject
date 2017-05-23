@@ -12,19 +12,22 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Component;
 
 import com.dao.entity.Inventory;
+import com.dao.exception.DataBaseException;
+import com.dao.exception.SessionFactoryException;
 
 @Component
 public class InventoryManagerImpl implements InventoryManager {
 
 
 
-	public SessionFactory createSession (){
+	public SessionFactory createSession ()throws SessionFactoryException{
 		SessionFactory factory = null;
 		try{
 			factory = new Configuration().configure().buildSessionFactory();
 		}catch(Throwable ex){
 			System.err.println("Failed to create sessionFactory object." + ex);
-	        throw new ExceptionInInitializerError(ex); 
+	       // throw new ExceptionInInitializerError(ex); 
+	        throw new SessionFactoryException("Failed to create sessionFactory object");
 		}
 		return factory;
 			
@@ -32,31 +35,48 @@ public class InventoryManagerImpl implements InventoryManager {
 
 	
 	@Override
-	public void addInventory(Inventory inventory) {
-		SessionFactory factory = createSession();
-		Session session = factory.openSession();
+	public void addInventory(Inventory inventory) throws DataBaseException {
+		SessionFactory factory = null;
+		Session session = null;
 		Transaction transaction = null ;
 		try{
+			factory = createSession();
+			session = factory.openSession();
 			transaction = session.beginTransaction();
 			session.persist(inventory);
-			transaction.commit();		
-		}catch(HibernateException e){
-	        if (transaction!=null) transaction.rollback();
-	        e.printStackTrace(); 
+			transaction.commit();	
+			
+		}catch(SessionFactoryException | HibernateException sfe){
+		    if (transaction!=null) transaction.rollback();
+			System.out.println("could not create session factor");
+			throw new DataBaseException(sfe);
+
 	     }finally {
+	     
 	        session.close(); 
 	     }
 	}
 
 
 	@Override
-	public Integer getInventoryTypeId(String inventoryType) {
-		SessionFactory factory = createSession();
-		Session session = factory.openSession();
+	public Integer getInventoryTypeId(String inventoryType) throws DataBaseException {
+		SessionFactory factory = null;
+		Session session = null;
+		Transaction transaction = null ;
+		List results = null;
 		String hql = "SELECT I.inventoryTypeId FROM InventoryType I WHERE I.inventoryType = :inventoryType" ;
-		Query query = session.createQuery(hql);
-		query.setParameter("inventoryType", inventoryType);
-		List results = query.list();
+		try{
+			factory = createSession();
+			session = factory.openSession();
+			Query query = session.createQuery(hql);
+			query.setParameter("inventoryType", inventoryType);
+			results = query.list();
+			
+		}catch(SessionFactoryException sfe){
+			System.out.println("could not create session factor");
+			throw new DataBaseException(sfe);
+		}
+
 		return (Integer)results.get(0);
 			
 		
