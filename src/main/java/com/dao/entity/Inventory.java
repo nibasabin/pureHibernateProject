@@ -26,13 +26,19 @@ private Integer inventoryTypeId;
 private String inventoryType;
 
 @Column(name="INVENTORY_PRICE")
-private Integer inventoryPrice;
+private Double inventoryPrice;
 
 @Column(name="INVENTORY_DESCRIPTION")
 private String inventoryDescription;
 
 @Column(name="INVENTORY_IMAGE",columnDefinition="LONGBLOB")
 private byte[] inventoryImage;
+
+@Column(name="USED_INVENTORY")
+private Boolean usedInventory;
+
+@Column(name = "NEW_INVENTORY")
+private Boolean newInventory;
 
 public Integer getInventoryId() {
 	return inventoryId;
@@ -58,10 +64,10 @@ public String getInventoryType() {
 public void setInventoryType(String inventoryType) {
 	this.inventoryType = inventoryType;
 }
-public Integer getInventoryPrice() {
+public Double getInventoryPrice() {
 	return inventoryPrice;
 }
-public void setInventoryPrice(Integer inventoryPrice) {
+public void setInventoryPrice(Double inventoryPrice) {
 	this.inventoryPrice = inventoryPrice;
 }
 public byte[] getInventoryImage() {
@@ -70,5 +76,18 @@ public byte[] getInventoryImage() {
 public void setInventoryImage(byte[] inventoryImage) {
 	this.inventoryImage = inventoryImage;
 }
+public Boolean getUsedInventory() {
+	return usedInventory;
+}
+public void setUsedInventory(Boolean usedInventory) {
+	this.usedInventory = usedInventory;
+}
+public Boolean getNewInventory() {
+	return newInventory;
+}
+public void setNewInventory(Boolean newInventory) {
+	this.newInventory = newInventory;
+}
+
 
 }

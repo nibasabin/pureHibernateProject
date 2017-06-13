@@ -1,6 +1,5 @@
 package com.dao.managers;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import com.dao.entity.UserInformationEntity;
 import com.dao.entityManagerFactory.SessionFactoryInstance;
-import com.dao.exception.DataBaseException;
-import com.dao.exception.SessionFactoryException;
 
 @Component
 public class UserManagerImpl implements UserManager {
