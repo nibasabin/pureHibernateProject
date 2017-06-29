@@ -13,7 +13,7 @@ public interface InventoryManager {
 
 	public void addInventory(Inventory inventory) throws SessionFactoryException, DataBaseException;
 	public Integer getInventoryTypeId(String inventoryType) throws DataBaseException;
-	public List< Inventory > getAllInventory();
+	public List< Inventory > getAllInventory(String category);
 	public List< Inventory > getUsersInventory(String userName);
 	public List< Inventory > getFilteredInventory(FilterCriteriaObject filterCriteriaObject);
 	public void addToGlobalInventory(Integer itemNo) throws DataBaseException;

@@ -87,14 +87,15 @@ public class InventoryManagerImpl implements InventoryManager {
 	}
 
 	@Override
-	public List<Inventory> getAllInventory() {
+	public List<Inventory> getAllInventory(String category) {
 		SessionFactory factory = sessionFactoryInstance.createSession();
 		Session session = factory.openSession();
 		Transaction transaction = null;
 		List<Inventory> inventoryList = null;
 		try {
 			transaction = session.beginTransaction();
-			Query query = session.createQuery("FROM Inventory I where I.inventoryId IN (FROM GlobalInventory)");
+			Query query = session.createQuery("FROM Inventory I where I.inventoryCategory = :category and I.inventoryId IN (FROM GlobalInventory)");
+			query.setParameter("category", category);
 			inventoryList = query.list();
 		} catch (HibernateException e) {
 			if (transaction != null)
@@ -116,6 +117,7 @@ public class InventoryManagerImpl implements InventoryManager {
 		try {
 			transaction = session.beginTransaction();
 			Criteria criteria = session.createCriteria(Inventory.class);
+			criteria.add(Restrictions.eq("inventoryCategory", filterCriteriaObject.getCategory()));
 			if (filterCriteriaObject.getMaxAmount() != 0 && filterCriteriaObject.getMinAmount() != 0) {
 				criteria.add(Restrictions.between("inventoryPrice", filterCriteriaObject.getMinAmount(),
 						filterCriteriaObject.getMaxAmount()));
