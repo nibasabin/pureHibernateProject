@@ -22,6 +22,9 @@ private Integer inventoryId;
 @Column(name ="INVENTORY_TYPE_ID")
 private Integer inventoryTypeId;
 
+@Column(name="INVENTORY_CATEGORY")
+private String inventoryCategory;
+
 @Column(name="INVENTORY_TYPE")
 private String inventoryType;
 
@@ -40,53 +43,98 @@ private Boolean usedInventory;
 @Column(name = "NEW_INVENTORY")
 private Boolean newInventory;
 
+@Column(name ="SELLER_NAME")
+private String sellerName;
+
+@Column(name="ITEM_SOLD")
+private Boolean itemSold;
+
 public Integer getInventoryId() {
 	return inventoryId;
 }
+
 public void setInventoryId(Integer inventoryId) {
 	this.inventoryId = inventoryId;
 }
+
 public Integer getInventoryTypeId() {
 	return inventoryTypeId;
 }
+
 public void setInventoryTypeId(Integer inventoryTypeId) {
 	this.inventoryTypeId = inventoryTypeId;
 }
-public String getInventoryDescription() {
-	return inventoryDescription;
+
+public String getInventoryCategory() {
+	return inventoryCategory;
 }
-public void setInventoryDescription(String inventoryDescription) {
-	this.inventoryDescription = inventoryDescription;
+
+public void setInventoryCategory(String inventoryCategory) {
+	this.inventoryCategory = inventoryCategory;
 }
+
 public String getInventoryType() {
 	return inventoryType;
 }
+
 public void setInventoryType(String inventoryType) {
 	this.inventoryType = inventoryType;
 }
+
 public Double getInventoryPrice() {
 	return inventoryPrice;
 }
+
 public void setInventoryPrice(Double inventoryPrice) {
 	this.inventoryPrice = inventoryPrice;
 }
+
+public String getInventoryDescription() {
+	return inventoryDescription;
+}
+
+public void setInventoryDescription(String inventoryDescription) {
+	this.inventoryDescription = inventoryDescription;
+}
+
 public byte[] getInventoryImage() {
 	return inventoryImage;
 }
+
 public void setInventoryImage(byte[] inventoryImage) {
 	this.inventoryImage = inventoryImage;
 }
+
 public Boolean getUsedInventory() {
 	return usedInventory;
 }
+
 public void setUsedInventory(Boolean usedInventory) {
 	this.usedInventory = usedInventory;
 }
+
 public Boolean getNewInventory() {
 	return newInventory;
 }
+
 public void setNewInventory(Boolean newInventory) {
 	this.newInventory = newInventory;
+}
+
+public String getSellerName() {
+	return sellerName;
+}
+
+public void setSellerName(String sellerName) {
+	this.sellerName = sellerName;
+}
+
+public Boolean getItemSold() {
+	return itemSold;
+}
+
+public void setItemSold(Boolean itemSold) {
+	this.itemSold = itemSold;
 }
 
 

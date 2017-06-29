@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.dao.entity.FilterCriteriaObject;
+import com.dao.entity.GlobalInventory;
 import com.dao.entity.Inventory;
 import com.dao.entityManagerFactory.SessionFactoryInstance;
 import com.dao.exception.DataBaseException;
@@ -93,9 +94,8 @@ public class InventoryManagerImpl implements InventoryManager {
 		List<Inventory> inventoryList = null;
 		try {
 			transaction = session.beginTransaction();
-			inventoryList = session.createQuery(" FROM Inventory").list();
-
-			transaction.commit();
+			Query query = session.createQuery("FROM Inventory I where I.inventoryId IN (FROM GlobalInventory)");
+			inventoryList = query.list();
 		} catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
@@ -155,8 +155,87 @@ public class InventoryManagerImpl implements InventoryManager {
 		return inventoryList;
 	}
 
-	private int compareDoubleValues(Double a, Double b) {
-		return Double.compare(a, b);
+	@Override
+	public List<Inventory> getUsersInventory(String userName) {
+		SessionFactory factory = sessionFactoryInstance.createSession();
+		Session session = factory.openSession();
+		List<Inventory> inventoryList = null;
+			Query query = session.createQuery(" FROM Inventory where sellerName = :sellerName");
+			query.setParameter("sellerName", userName);
+			inventoryList = query.list(); 
+			session.close();
+
+		return inventoryList;
+	}
+
+	@Override
+	public void addToGlobalInventory(Integer itemNo) throws DataBaseException {
+		GlobalInventory globalInventory = new GlobalInventory();
+		globalInventory.setInventoryId(itemNo);		
+		markAsSold(itemNo);
+		SessionFactory factory = null;
+		Session session = null;
+		Transaction transaction = null;
+		try {
+			factory = createSession();
+			session = factory.openSession();
+			transaction = session.beginTransaction();
+			session.persist(globalInventory);
+			transaction.commit();
+
+		} catch (SessionFactoryException | HibernateException sfe) {
+			if (transaction != null)
+				transaction.rollback();
+			System.out.println("could not create session factor");
+			throw new DataBaseException(sfe);
+
+		} finally {
+
+			session.close();
+		}
+	}
+	
+
+	public void markAsSold(Integer itemNo) throws DataBaseException {
+		SessionFactory factory = null;
+		Session session = null;
+			try {
+				factory = createSession();
+				session = factory.openSession();
+				Query query = session.createQuery("Update Inventory set itemSold = true where Inventory_Id=:itemNo");
+				query.setParameter("itemNo", itemNo);
+				query.executeUpdate();
+			} catch (SessionFactoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+
+			session.close();
+			}
+	}
+
+	@Override
+	public void deleteItem(Integer itemNo) throws DataBaseException {
+		SessionFactory factory = null;
+		Session session = null;
+			try {
+				factory = createSession();
+				session = factory.openSession();
+				Query query = session.createQuery("delete from Inventory where Inventory_Id=:itemNo");
+				query.setParameter("itemNo", itemNo);
+				query.executeUpdate();
+				Query query2 = session.createQuery("delete from GlobalInventory where Inventory_Id=:itemNo");
+				query2.setParameter("itemNo", itemNo);
+				query2.executeUpdate();
+			} catch (SessionFactoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+
+			session.close();
+			}
+
+		
 	}
 
 }

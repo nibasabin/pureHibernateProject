@@ -20,7 +20,8 @@
    
     <mapping class="com.dao.entity.Inventory"/>
     <mapping class="com.dao.entity.InventoryType"/>
-     <mapping class="com.dao.entity.UserInformationEntity"/>
+    <mapping class="com.dao.entity.UserInformationEntity"/>
+    <mapping class="com.dao.entity.GlobalInventory"/>
 
 </session-factory>
 </hibernate-configuration>
